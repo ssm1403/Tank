@@ -23,15 +23,13 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import com.intuit.tank.script.util.ScriptServiceUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 
@@ -59,10 +57,7 @@ public class TankXmlUploadBean implements Serializable {
     private Event<ModifiedScriptMessage> scriptEvent;
 
     @Inject
-    private Identity identity;
-    
-    @Inject
-    private IdentityManager identityManager;
+    private SecurityContext securityContext;
 
     @Inject
     private Messages messages;
@@ -123,7 +118,7 @@ public class TankXmlUploadBean implements Serializable {
             }
             script.setSerializedScriptStepId(existing.getSerializedScriptStepId());
         } else {
-            script.setCreator(identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName());
+            script.setCreator(securityContext.getCallerPrincipal().getName());
         }
         script = dao.saveOrUpdate(script);
         LOG.info("Script " + script.getName() + " from file " + fileName + " has been added.");

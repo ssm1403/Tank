@@ -16,36 +16,24 @@ package com.intuit.tank.auth;
  * #L%
  */
 
+import java.io.IOException;
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Event;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.AuthenticationStatus;
+import javax.security.enterprise.SecurityContext;
+import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
+import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
-import com.amazonaws.xray.AWSXRay;
-import com.intuit.tank.service.InitializeEnvironment;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.Identity.AuthenticationResult;
-import org.picketlink.annotations.PicketLink;
-import org.picketlink.authentication.BaseAuthenticator;
-import org.picketlink.credential.DefaultLoginCredentials;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.RelationshipManager;
-import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.basic.Role;
-import org.picketlink.idm.model.basic.User;
-
-import com.intuit.tank.dao.UserDao;
-
-import static org.picketlink.idm.model.basic.BasicModel.*;
 
 /**
  * TankAuthenticator
@@ -55,113 +43,74 @@ import static org.picketlink.idm.model.basic.BasicModel.*;
  */
 @Named("tsAuthenticator")
 @RequestScoped
-@PicketLink
-public class TankAuthenticator extends BaseAuthenticator implements Serializable {
+public class TankAuthenticator implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    @NotEmpty
+    @Size(min = 8, message = "Password must have at least 8 characters")
+    private String password;
 
-    private static final Logger LOG = LogManager.getLogger(TankAuthenticator.class);
-
-    @Inject
-    private InitializeEnvironment initializeEnvironment;
-
-    @Inject
-    private Identity identity;
-    
-    @Inject
-    private IdentityManager identityManager;
-    
-    @Inject
-    private RelationshipManager relationshipManager;
+    @NotEmpty
+    @Size(min= 2, message = "Please provide a valid username")
+    private String username;
 
     @Inject
-    private DefaultLoginCredentials credentials;
-    
+    private SecurityContext securityContext;
+
+    @Inject
+    private FacesContext facesContext;
+
+    private ExternalContext externalContext = facesContext.getExternalContext();
+
     @Inject
     private Messages messages;
 
-    @Inject
-    @Authenticated
-    private Event<User> loginEventSrc;
+    public void submit() throws IOException {
 
-    private String uri;
-
-    @PostConstruct
-    public void init() {
-        initializeEnvironment.ping();
-    }
-
-    public void authenticate() {
-        
-        if (credentials.getUserId() == null || credentials.getPassword() == null) {
-            messages.error("Invalid username or password");
-            setStatus(AuthenticationStatus.FAILURE);
-            return;
-        }
-        LOG.info("Attempting to login " + credentials.getUserId());
-        com.intuit.tank.project.User user = new UserDao().authenticate(credentials.getUserId(), credentials.getPassword());
-        if (user != null) {
-            AWSXRay.getCurrentSegment().setUser(user.getName());
-        	User idmuser = getUser(identityManager,user.getName());
-        	if (idmuser == null ) {
-        		idmuser = new User(user.getName());
-        		idmuser.setId(Integer.toString(user.getId()));
-	        	idmuser.setCreatedDate(user.getCreated());
-	        	idmuser.setEmail(user.getEmail());
-	        	idmuser.setAttribute(new Attribute<String>("name", user.getName()));
-	        	identityManager.add(idmuser);
-	            for (com.intuit.tank.project.Group g : user.getGroups()) {
-	            	Role role = getRole(identityManager, g.getName());
-	            	if (role == null) {
-	            		role = new Role(g.getName());
-	            		identityManager.add(role);
-	            	}
-	            	grantRole(relationshipManager, idmuser, role);
-	            }
-        	}
-            loginEventSrc.fire(idmuser);
-            LOG.info("Successfully logged in " + credentials.getUserId());
-            messages.info("You're signed in as " + idmuser.getLoginName());
-            setStatus(AuthenticationStatus.SUCCESS);
-            setAccount(idmuser);
-            // messages.clear();
-            return;
-        }
-        messages.error("Invalid username or password");
-        setStatus(AuthenticationStatus.FAILURE);
-    }
-
-    public void initUri() {
-        if (uri == null) {
-        	HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            uri = req.getRequestURI();
-            uri = uri.replace(req.getContextPath(), "");
-            int indexOf = uri.lastIndexOf('/');
-            if (indexOf != -1) {
-                uri = uri.substring(0, indexOf) + "/index.xhtml";
-            }
+        switch (continueAuthentication()) {
+            case SEND_CONTINUE:
+                facesContext.responseComplete();
+                break;
+            case SEND_FAILURE:
+                messages.error("Invalid username or password");
+                break;
+            case SUCCESS:
+                messages.info("You're signed in as " + username);
+                externalContext.redirect(externalContext.getRequestContextPath() + "/projects/index.xhtml");
+                break;
+            case NOT_DONE:
         }
     }
 
-    public String getUri() {
-        initUri();
-        return uri;
+    private AuthenticationStatus continueAuthentication() {
+        return securityContext.authenticate(
+                (HttpServletRequest) externalContext.getRequest(),
+                (HttpServletResponse) externalContext.getResponse(),
+                AuthenticationParameters.withParams().credential(new UsernamePasswordCredential(username, password))
+        );
     }
 
-    public String login() {
-        AuthenticationResult result = identity.login();
-        if (AuthenticationResult.SUCCESS.equals(result)) {
-            if (uri == null || StringUtils.countMatches(uri, "/") <= 1) {
-                return "/projects/index.xhtml";
-            }
-        }
-        return uri;
+    public boolean loggedIn() {
+        return securityContext.getCallerPrincipal() != null;
     }
-    
+
     public String logout() {
-    	identity.logout();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/login.xhtml?faces-redirect=true";
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

@@ -15,10 +15,6 @@
   <name>Intuit Tank Api</name>
 
   <dependencies>
-    <dependency>
-      <groupId>javax.enterprise</groupId>
-      <artifactId>cdi-api</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>commons-jxpath</groupId>

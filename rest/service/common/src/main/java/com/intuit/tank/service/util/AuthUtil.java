@@ -16,20 +16,16 @@ package com.intuit.tank.service.util;
  * #L%
  */
 
+import javax.security.enterprise.SecurityContext;
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
-import org.picketlink.Identity;
 
 import com.intuit.tank.project.OwnableEntity;
 import com.intuit.tank.vm.common.TankConstants;
-
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.RelationshipManager;
-import static org.picketlink.idm.model.basic.BasicModel.*;
 
 /**
  * AuthUtil
@@ -53,12 +49,8 @@ public class AuthUtil {
      *             if the user is not authenticated.
      */
     public static void checkAdmin(ServletContext servletContext) throws WebApplicationException {
-        Identity identity = new ServletInjector<Identity>().getManagedBean(servletContext, Identity.class);
-        IdentityManager identityManager = new ServletInjector<IdentityManager>().getManagedBean(servletContext, IdentityManager.class);
-        RelationshipManager relationshipManager = new ServletInjector<RelationshipManager>().getManagedBean(servletContext, RelationshipManager.class);
-        
-        if (identity == null
-                || !hasRole(relationshipManager, identity.getAccount(), getRole(identityManager, TankConstants.TANK_GROUP_ADMIN))) {
+        SecurityContext securityContext = new ServletInjector<SecurityContext>().getManagedBean(servletContext, SecurityContext.class);
+        if (securityContext == null || !securityContext.isCallerInRole(TankConstants.TANK_GROUP_ADMIN)) {
             throw new WebApplicationException(buildForbiddenResponse("Insuficient Rights"));
         }
     }
@@ -72,8 +64,8 @@ public class AuthUtil {
      *             if the user is not authenticated.
      */
     public static void checkLoggedIn(ServletContext servletContext) throws WebApplicationException {
-        Identity identity = new ServletInjector<Identity>().getManagedBean(servletContext, Identity.class);
-        if (identity == null || !identity.isLoggedIn()) {
+        SecurityContext securityContext = new ServletInjector<SecurityContext>().getManagedBean(servletContext, SecurityContext.class);
+        if (securityContext == null || securityContext.getCallerPrincipal() == null) {
             throw new WebApplicationException(buildForbiddenResponse("Login Required"));
         }
     }
@@ -89,15 +81,12 @@ public class AuthUtil {
      *             if the user is not authenticated.
      */
     public static void checkOwner(ServletContext servletContext, OwnableEntity ownable) throws WebApplicationException {
-        checkLoggedIn(servletContext);
-        Identity identity = new ServletInjector<Identity>().getManagedBean(servletContext, Identity.class);
-        IdentityManager identityManager = new ServletInjector<IdentityManager>().getManagedBean(servletContext, IdentityManager.class);
-        RelationshipManager relationshipManager = new ServletInjector<RelationshipManager>().getManagedBean(servletContext, RelationshipManager.class);
+        SecurityContext securityContext = new ServletInjector<SecurityContext>().getManagedBean(servletContext, SecurityContext.class);
         
-        if (hasRole(relationshipManager, identity.getAccount(), getRole(identityManager, TankConstants.TANK_GROUP_ADMIN))) {
+        if (securityContext.isCallerInRole(TankConstants.TANK_GROUP_ADMIN)) {
             return;
         }
-        if (StringUtils.isEmpty(ownable.getCreator()) || identity.getAccount().getId().equals(ownable.getCreator())) {
+        if (StringUtils.isEmpty(ownable.getCreator()) || securityContext.getCallerPrincipal().getName().equals(ownable.getCreator())) {
             return;
         }
         throw new WebApplicationException(buildForbiddenResponse("Insufficient Rights"));

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
+import javax.security.enterprise.SecurityContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -30,7 +31,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.picketlink.Identity;
 
 import com.intuit.tank.auth.TankUser;
 import com.intuit.tank.dao.UserDao;
@@ -44,7 +44,7 @@ public class RestSecurityFilter implements Filter {
     private TankConfig config;
 
     @Inject
-    private Identity identity;
+    private SecurityContext securityContext;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -69,11 +69,8 @@ public class RestSecurityFilter implements Filter {
     public User getUser(HttpServletRequest req) {
         User user = null;
         // firsttry the session
-        if (identity != null) {
-        	org.picketlink.idm.model.basic.User picketLinkUser = (org.picketlink.idm.model.basic.User) identity.getAccount();
-            if (picketLinkUser != null && picketLinkUser instanceof TankUser) {
-                user = ((TankUser)picketLinkUser).getUserEntity();
-            }
+        if (securityContext.getCallerPrincipal() != null) {
+            user = new UserDao().findByUserName(securityContext.getCallerPrincipal().getName());
         }
         if (user == null) {
             String authHeader = req.getHeader("authorization");

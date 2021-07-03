@@ -62,49 +62,54 @@
     <url-pattern>*</url-pattern>
   </filter-mapping>
 
-  <!-- Login filter -->
-  <filter>
-      <filter-name>LoginFilter</filter-name>
-      <filter-class>com.intuit.tank.config.LoginFilter</filter-class>
-  </filter>
-  <!-- Set the login filter to secure all the pages in the /secured/* path of the application  -->
-  <filter-mapping>
-      <filter-name>LoginFilter</filter-name>
-      <url-pattern>/admin/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-      <filter-name>LoginFilter</filter-name>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Project pages</web-resource-name>
       <url-pattern>/projects/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-      <filter-name>LoginFilter</filter-name>
+    </web-resource-collection>
+    <web-resource-collection>
+      <web-resource-name>Script pages</web-resource-name>
       <url-pattern>/scripts/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-      <filter-name>LoginFilter</filter-name>
+    </web-resource-collection>
+    <web-resource-collection>
+      <web-resource-name>Filter pages</web-resource-name>
       <url-pattern>/filters/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-      <filter-name>LoginFilter</filter-name>
+    </web-resource-collection>
+    <web-resource-collection>
+      <web-resource-name>Agent pages</web-resource-name>
       <url-pattern>/agents/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-      <filter-name>LoginFilter</filter-name>
+    </web-resource-collection>
+    <web-resource-collection>
+      <web-resource-name>DataFile pages</web-resource-name>
       <url-pattern>/datafiles/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-      <filter-name>LoginFilter</filter-name>
+    </web-resource-collection>
+    <web-resource-collection>
+      <web-resource-name>Tools pages</web-resource-name>
       <url-pattern>/tools/*</url-pattern>
-  </filter-mapping>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>ADMIN</role-name>
+      <role-name>USER</role-name>
+    </auth-constraint>
+  </security-constraint>
 
-  <filter>
-    <filter-name>UserName Filter</filter-name>
-    <filter-class>com.intuit.tank.util.UserNameFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>UserName Filter</filter-name>
-    <servlet-name>Faces Servlet</servlet-name>
-  </filter-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Admin pages</web-resource-name>
+      <url-pattern>/admin/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>ADMIN</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-role>
+    <role-name>USER</role-name>
+  </security-role>
+  <security-role>
+    <role-name>ADMIN</role-name>
+  </security-role>
+
   <!-- Activate the JSF 2.0 servlet -->
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>

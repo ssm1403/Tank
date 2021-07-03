@@ -20,11 +20,6 @@
       <artifactId>data-access</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.picketlink</groupId>
-      <artifactId>picketlink</artifactId>
-    </dependency>
   </dependencies>
 
 </project>

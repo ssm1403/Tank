@@ -19,6 +19,7 @@ import java.util.List;
 import com.amazonaws.xray.AWSXRay;
 import com.intuit.tank.dao.ScriptDao;
 import com.intuit.tank.filter.FilterBean;
+import com.intuit.tank.project.User;
 import com.intuit.tank.util.Messages;
 import org.junit.jupiter.api.*;
 
@@ -37,10 +38,9 @@ import com.intuit.tank.project.ScriptStep;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
 
 import javax.enterprise.context.Conversation;
+import javax.security.enterprise.SecurityContext;
 
 /**
  * The class <code>ScriptEditorTest</code> contains tests for the class <code>{@link ScriptEditor}</code>.
@@ -53,7 +53,7 @@ public class ScriptEditorTest {
     private ScriptEditor fixture;
 
     @Mock
-    private IdentityManager identityManager;
+    private SecurityContext securityContext;
 
     @Mock
     Messages messages;
@@ -2954,9 +2954,7 @@ public class ScriptEditorTest {
 
     @Test
     public void testSaveAs() {
-        User user = new User();
-        user.setLoginName("LoginName");
-        when(identityManager.lookupById(eq(User.class), anyString())).thenReturn(user);
+        when(securityContext.getCallerPrincipal().getName()).thenReturn("LoginName");
         Script script = Script.builder().name("Name").build();
         fixture.setScript(script);
         fixture.setSaveAsName("SaveAsName");

@@ -24,20 +24,17 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
 import org.primefaces.event.FileUploadEvent;
 
 import com.intuit.tank.ModifiedDatafileMessage;
 import com.intuit.tank.config.TsLoggedIn;
 import com.intuit.tank.dao.DataFileDao;
-import com.intuit.tank.project.DataFile;
 import com.intuit.tank.qualifier.Modified;
 import com.intuit.tank.util.UploadedFileIterator;
 import com.intuit.tank.wrapper.FileInputStreamWrapper;
@@ -57,11 +54,7 @@ public class FileUploadBean implements Serializable {
     private Event<ModifiedDatafileMessage> dataFileEvent;
 
     @Inject
-    private Identity identity;
-	
-    @Inject 
-    private IdentityManager identityManager;
-
+    private SecurityContext securityContext;
     @Inject
     private Messages messages;
 
@@ -106,7 +99,7 @@ public class FileUploadBean implements Serializable {
     private void createDataFile(String fileName, InputStream is) {
         DataFile df = new DataFile();
         df.setPath(fileName);
-        df.setCreator(identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName());
+        df.setCreator(securityContext.getCallerPrincipal().getName());
         df.setModified(new Date());
         df.setCreated(new Date());
         df = new DataFileDao().storeDataFile(df, is);

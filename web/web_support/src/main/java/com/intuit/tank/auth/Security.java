@@ -22,21 +22,15 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.RelationshipManager;
-import org.picketlink.idm.model.basic.Role;
 
 import com.intuit.tank.project.OwnableEntity;
 import com.intuit.tank.vm.common.TankConstants;
 import com.intuit.tank.vm.settings.AccessRight;
 import com.intuit.tank.vm.settings.SecurityConfig;
 import com.intuit.tank.vm.settings.TankConfig;
-
-import static org.picketlink.idm.model.basic.BasicModel.*;
-
 
 /**
  * Security
@@ -51,13 +45,7 @@ public class Security implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private Identity identity;
-    
-    @Inject
-    private IdentityManager identityManager;
-
-    @Inject
-    private RelationshipManager relationshipManager;
+    private SecurityContext securityContext;
 
     @Inject
     private TankConfig tankConfig;
@@ -68,42 +56,19 @@ public class Security implements Serializable {
      * @return
      */
     public boolean isOwner(OwnableEntity entity) {
-    	if ( StringUtils.isNotEmpty(entity.getCreator()) && getUser(identityManager,entity.getCreator()) != null && identity.getAccount() != null ) {
-    			return getUser(identityManager,entity.getCreator()).getId().equals(identity.getAccount().getId());
+    	if ( StringUtils.isNotEmpty(entity.getCreator()) &&
+                securityContext.getCallerPrincipal() != null ) {
+    	    return entity.getCreator().equals(securityContext.getCallerPrincipal().getName());
     	}
     	return false;
     }
 
     /**
-     * 
-     * @param entity
+     *
      * @return
      */
     public boolean isAdmin() {
-    	Role adminRole;
-    	if ( identity.isLoggedIn() && 
-    			identity.getAccount() != null && 
-    			(adminRole = getRole(identityManager, TankConstants.TANK_GROUP_ADMIN)) != null ) {
-    			return org.picketlink.idm.model.basic.BasicModel.hasRole(relationshipManager, identity.getAccount(), adminRole );
-    	}
-    	return false;
-    }
-
-    /**
-     * 
-     * @param entity
-     * @return
-     */
-    public boolean hasRole(String roleString) {
-    	Role role;
-    	if (StringUtils.isNotEmpty(roleString)) {
-    		if ( identity.isLoggedIn() && 
-    				identity.getAccount() != null && 
-    				(role = getRole(identityManager, roleString)) != null ) {
-    			return org.picketlink.idm.model.basic.BasicModel.hasRole(relationshipManager, identity.getAccount(), role);
-    		}
-    	}
-    	return false;
+        return securityContext.isCallerInRole(TankConstants.TANK_GROUP_ADMIN);
     }
 
     public boolean hasRight(AccessRight right) {
@@ -113,9 +78,8 @@ public class Security implements Serializable {
         SecurityConfig config = tankConfig.getSecurityConfig();
         List<String> associatedGroups = config.getRestrictionMap().get(right.name());
         if (associatedGroups != null) {
-            return associatedGroups.stream().anyMatch(this::hasRole);
+            return associatedGroups.stream().anyMatch(role -> securityContext.isCallerInRole(role));
         }
         return false;
     }
-
 }

@@ -15,18 +15,18 @@ package com.intuit.tank.script;
 
 
 import javax.faces.view.ViewScoped;
+import javax.security.enterprise.SecurityContext;
 
 import com.intuit.tank.auth.Security;
 import com.intuit.tank.prefs.TablePreferences;
 import com.intuit.tank.project.Script;
+import com.intuit.tank.project.User;
 import com.intuit.tank.util.ExceptionHandler;
 import com.intuit.tank.util.Messages;
 import com.intuit.tank.view.filter.ViewFilterType;
 import com.intuit.tank.vm.settings.AccessRight;
 import com.intuit.tank.wrapper.SelectableWrapper;
 import org.jboss.weld.junit5.auto.ActivateScopes;
-import org.jboss.weld.junit5.auto.AddExtensions;
-import org.jboss.weld.junit5.auto.AddPackages;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
@@ -39,19 +39,13 @@ import static org.mockito.Mockito.when;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.picketlink.Identity;
-import org.picketlink.extension.PicketLinkExtension;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
+import org.mockito.MockitoAnnotations;;
 
 import java.util.LinkedList;
 import java.util.List;
 
 
 @EnableAutoWeld
-@AddPackages(Identity.class)
-@AddExtensions(PicketLinkExtension.class)
 @ActivateScopes(ViewScoped.class)
 public class ScriptBeanTest {
 
@@ -62,10 +56,10 @@ public class ScriptBeanTest {
     private ScriptLoader scriptLoader;
 
     @Mock
-    private Security security;
+    private SecurityContext securityContext;
 
     @Mock
-    private IdentityManager identityManager;
+    private Security security;
 
     @Mock
     private Messages messages;
@@ -131,9 +125,7 @@ public class ScriptBeanTest {
 
     @Test
     public void testSaveAs() {
-        User user = new User();
-        user.setLoginName("LoginName");
-        when(identityManager.lookupById(eq(User.class), anyString())).thenReturn(user);
+        when(securityContext.getCallerPrincipal().getName()).thenReturn("LoginName");
         scriptBean.setSaveAsName("New Name");
         Script script = Script.builder().name("Old Name").build();
         scriptBean.saveAs(script);

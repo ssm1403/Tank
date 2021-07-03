@@ -25,14 +25,12 @@ import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
 
 import com.intuit.tank.ModifiedScriptMessage;
 import com.intuit.tank.auth.Security;
@@ -72,10 +70,7 @@ public class ScriptCreationBean implements Serializable {
     private ScriptProcessor scriptProcessor;
 
     @Inject
-    private Identity identity;
-    
-    @Inject
-    private IdentityManager identityManager;
+    private SecurityContext securityContext;
     
     @Inject
     private Security security;
@@ -216,7 +211,7 @@ public class ScriptCreationBean implements Serializable {
             try {
                 Script script = new Script();
                 script.setName(getName());
-                script.setCreator(identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName());
+                script.setCreator(securityContext.getCallerPrincipal().getName());
                 script.setProductName(productName);
                 if (getCreationMode().equals("Upload Script")) {
                     UploadedFileIterator uploadedFileIterator = new UploadedFileIterator(item, "xml");

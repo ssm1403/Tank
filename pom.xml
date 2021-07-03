@@ -33,13 +33,9 @@
 
     <version-tomcat>9.0.46</version-tomcat>
     <weld.version>3.1.7.SP1</weld.version>
-    <cdi.version>2.0</cdi.version>
-    <version.picketlink.javaee.bom>2.7.1.Final</version.picketlink.javaee.bom>
 
     <version.enunciate>2.13.3</version.enunciate>
 
-    <version.mojarra>2.4.0</version.mojarra>
-    <version.jsf-api>2.3</version.jsf-api>
     <version.primefaces>10.0.0</version.primefaces>
     <version.primefaces-ext>10.0.1</version.primefaces-ext>
     <version.jsr166>1.7.0</version.jsr166>
@@ -258,6 +254,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
     </dependency>
@@ -432,27 +433,9 @@
       </dependency>
 
       <dependency>
-        <groupId>javax.faces</groupId>
-        <artifactId>javax.faces-api</artifactId>
-        <version>${version.jsf-api}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.glassfish</groupId>
-        <artifactId>javax.faces</artifactId>
-        <version>${version.mojarra}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi</artifactId>
-        <version>4.1.2</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.itextpdf</groupId>
-        <artifactId>itextpdf</artifactId>
-        <version>5.5.13.1</version>
+        <groupId>javax</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>8.0</version>
       </dependency>
 
       <dependency>
@@ -477,15 +460,6 @@
         <groupId>org.primefaces.themes</groupId>
         <artifactId>redmond</artifactId>
         <version>1.0.10</version>
-      </dependency>
-
-      <!-- Dependency Management for PicketLink and Apache Deltaspike. -->
-      <dependency>
-        <groupId>org.picketlink</groupId>
-        <artifactId>picketlink-javaee-6.0</artifactId>
-        <version>${version.picketlink.javaee.bom}</version>
-        <scope>import</scope>
-        <type>pom</type>
       </dependency>
 
       <dependency>
@@ -742,11 +716,6 @@
         <artifactId>weld-servlet-core</artifactId>
         <version>${weld.version}</version>
         <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>javax.enterprise</groupId>
-        <artifactId>cdi-api</artifactId>
-        <version>${cdi.version}</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>

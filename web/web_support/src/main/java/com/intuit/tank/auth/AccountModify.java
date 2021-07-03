@@ -23,14 +23,13 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
 
 import com.intuit.tank.admin.Deleted;
 import com.intuit.tank.dao.PreferencesDao;
@@ -53,10 +52,7 @@ public class AccountModify implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private Identity identity;
-    
-    @Inject 
-    private IdentityManager identityManager;
+    private SecurityContext securityContext;
 
     private String passwordConfirm;
 
@@ -74,9 +70,8 @@ public class AccountModify implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            if (identity.isLoggedIn()) {
-            	String loginName = identityManager.lookupById(org.picketlink.idm.model.basic.User.class, identity.getAccount().getId()).getLoginName();
-            	user = new UserDao().findByUserName(loginName);
+            if (securityContext.getCallerPrincipal() != null) {
+            	user = new UserDao().findByUserName(securityContext.getCallerPrincipal().getName());
             }
         } catch (Exception e) {
             LOG.error("Error getting user: " + e, e);
@@ -106,8 +101,7 @@ public class AccountModify implements Serializable {
     }
 
     /**
-     * 
-     * @param user
+     *
      */
     public void resetPreferences() {
         try {

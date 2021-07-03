@@ -16,7 +16,6 @@ package com.intuit.tank.script;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +27,7 @@ import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import com.amazonaws.xray.AWSXRay;
 import com.amazonaws.xray.entities.Subsegment;
@@ -38,9 +38,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -109,10 +106,7 @@ public class ScriptEditor implements Serializable {
     private LogicStepEditor logicStepEditor;
 
     @Inject
-    private Identity identity;
-    
-    @Inject
-    private IdentityManager identityManager;
+    private SecurityContext securityContext;
     
     @Inject
     private Security security;
@@ -519,8 +513,7 @@ public class ScriptEditor implements Serializable {
                 save();
             } else {
                 Script copyScript = ScriptUtil.copyScript(
-                		identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName()
-                		, saveAsName, script);
+                		securityContext.getCallerPrincipal().getName(), saveAsName, script);
                 copyScript = new ScriptDao().saveOrUpdate(copyScript);
                 scriptEvent.fire(new ModifiedScriptMessage(copyScript, this));
                 messages.info("Script " + originalName + " has been saved as "

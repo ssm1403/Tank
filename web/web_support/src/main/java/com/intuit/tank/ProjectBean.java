@@ -23,15 +23,13 @@ import javax.enterprise.context.Conversation;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import com.amazonaws.xray.AWSXRay;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
 
 import com.intuit.tank.auth.Security;
 import com.intuit.tank.dao.ProjectDao;
@@ -61,15 +59,12 @@ public class ProjectBean implements Serializable {
 
     @Inject
     private UsersAndTimes usersAndTimes;
-
-    @Inject
-    private Identity identity;
-    
-    @Inject
-    private IdentityManager identityManager;
     
     @Inject
     private Conversation conversation;
+
+    @Inject
+    private SecurityContext securityContext;
     
     @Inject
     private Security security;
@@ -273,7 +268,7 @@ public class ProjectBean implements Serializable {
         workloads.add(workload);
         ret.setWorkloads(workloads);
         ret.setComments(project.getComments());
-        ret.setCreator(identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName());
+        ret.setCreator(securityContext.getCallerPrincipal().getName());
         ret.setName(saveAsName);
         ret.setProductName(project.getProductName());
         ret.setScriptDriver(project.getScriptDriver());

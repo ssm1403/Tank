@@ -17,13 +17,12 @@ package com.intuit.tank.service;
  */
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.PartitionManager;
 
 import com.intuit.tank.dao.GroupDao;
 import com.intuit.tank.dao.UserDao;
@@ -39,23 +38,18 @@ import com.intuit.tank.vm.settings.TankConfig;
  * @author dangleton
  * 
  */
+@Startup
 @ApplicationScoped
 public class InitializeEnvironment {
     private static final Logger LOG = LogManager.getLogger(InitializeEnvironment.class);
 
     @Inject
     private TankConfig tankConfig;
-
-    @Inject
-    private PartitionManager partitionManager;
-
-    private IdentityManager identityManager;
     
     boolean initialize = false;
 
     @PostConstruct
     public void init() {
-    	identityManager = this.partitionManager.createIdentityManager();
         createDefaultGroups();
         createDefaultUsers();
         initialize = true;
@@ -103,8 +97,6 @@ public class InitializeEnvironment {
                     groupDao.saveOrUpdate(new Group(g));
                     LOG.info("Created Group " + g);
                 } else {
-                    identityManager.add(new org.picketlink.idm.model.basic.Role(g));
-//                    identityManager.add(new org.picketlink.idm.model.basic.Group(g));
                     LOG.info("Initialized Role " + g);
                 }
             } catch (Exception e) {
@@ -112,6 +104,4 @@ public class InitializeEnvironment {
             }
         }
     }
-
-    public void ping() {}
 }

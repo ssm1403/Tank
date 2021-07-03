@@ -15,14 +15,13 @@ package com.intuit.tank.script;
 
 import java.util.List;
 
+import com.intuit.tank.project.User;
 import org.junit.jupiter.api.*;
-import org.picketlink.idm.model.basic.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.intuit.tank.auth.TankUser;
 import com.intuit.tank.project.ScriptStep;
-import com.intuit.tank.script.CopyBuffer;
 
 /**
  * The class <code>CopyBufferTest</code> contains tests for the class <code>{@link CopyBuffer}</code>.

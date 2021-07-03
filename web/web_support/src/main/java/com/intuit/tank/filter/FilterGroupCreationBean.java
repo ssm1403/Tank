@@ -22,12 +22,10 @@ import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
 
 import org.apache.commons.lang3.StringUtils;
 import com.intuit.tank.util.Messages;
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
 
 import com.intuit.tank.auth.Security;
 import com.intuit.tank.config.TsLoggedIn;
@@ -56,10 +54,7 @@ public class FilterGroupCreationBean extends SelectableBean<ScriptFilter> implem
     private Conversation conversation;
 
     @Inject
-    private Identity identity;
-	
-    @Inject 
-    private IdentityManager identityManager;
+    private SecurityContext securityContext;
     
     @Inject
     private Security security;
@@ -83,8 +78,8 @@ public class FilterGroupCreationBean extends SelectableBean<ScriptFilter> implem
     }
 
     /**
-     * @param saveAsName
-     *            the saveAsName to set
+     * @param name
+     *            the name to set
      */
     public void setName(String name) {
         getSfg().setName(name);
@@ -127,7 +122,7 @@ public class FilterGroupCreationBean extends SelectableBean<ScriptFilter> implem
     	conversation.begin();
         editing = false;
         this.sfg = new ScriptFilterGroup();
-        sfg.setCreator(identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName());
+        sfg.setCreator(securityContext.getCallerPrincipal().getName());
     }
 
     public void cancel() {
@@ -170,7 +165,7 @@ public class FilterGroupCreationBean extends SelectableBean<ScriptFilter> implem
                 save();
             } else {
                 ScriptFilterGroup copied = new ScriptFilterGroup();
-                copied.setCreator(identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName());
+                copied.setCreator(securityContext.getCallerPrincipal().getName());
                 copied.setName(saveAsName);
                 copied.setProductName(sfg.getProductName());
                 copied = new ScriptFilterGroupDao().saveOrUpdate(copied);

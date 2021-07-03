@@ -22,10 +22,7 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.basic.User;
+import javax.security.enterprise.SecurityContext;
 
 import com.intuit.tank.admin.UserAdmin;
 import com.intuit.tank.auth.Security;
@@ -46,15 +43,12 @@ public class OwnerUtilBean implements Serializable {
 
     @Inject
     UserAdmin userAdmin;
+
+    @Inject
+    private SecurityContext securityContext;
     
     @Inject
     Security security;
-    
-    @Inject
-    Identity identity;
-	
-    @Inject 
-    private IdentityManager identityManager;
 
     public boolean isOwnable(Object obj) {
         return obj instanceof OwnableEntity;
@@ -65,21 +59,16 @@ public class OwnerUtilBean implements Serializable {
     }
 
     public boolean canChangeOwner(Object obj) {
-        boolean retVal = true;
         if (isOwnable(obj)) {
             OwnableEntity entity = (OwnableEntity) obj;
             if ((entity.getCreator()).isEmpty()) {
-                entity.setCreator(identityManager.lookupById(User.class, identity.getAccount().getId()).getLoginName());
+                entity.setCreator(securityContext.getCallerPrincipal().getName());
             }
             if (security.isOwner((OwnableEntity) entity) || security.isAdmin()) {
-                retVal = true;
-            } else {
-                retVal = false;
+                return true;
             }
-        } else {
-            retVal = false;
         }
-        return retVal;
+        return false;
     }
 
 }

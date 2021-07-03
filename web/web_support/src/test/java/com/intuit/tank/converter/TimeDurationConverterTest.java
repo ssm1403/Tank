@@ -101,7 +101,7 @@ public class TimeDurationConverterTest {
         TimeDurationConverter fixture = new TimeDurationConverter();
         FacesContext facesContext = FacesContext.getCurrentInstance();
         UIComponent uiComponent = new DynaForm();
-        Object obj = new Byte((byte) 1);
+        Object obj = (byte) 1;
 
         String result = fixture.getAsString(facesContext, uiComponent, obj);
 
