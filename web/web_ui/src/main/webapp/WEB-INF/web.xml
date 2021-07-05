@@ -64,27 +64,12 @@
 
   <security-constraint>
     <web-resource-collection>
-      <web-resource-name>Project pages</web-resource-name>
+      <web-resource-name>Common pages</web-resource-name>
       <url-pattern>/projects/*</url-pattern>
-    </web-resource-collection>
-    <web-resource-collection>
-      <web-resource-name>Script pages</web-resource-name>
       <url-pattern>/scripts/*</url-pattern>
-    </web-resource-collection>
-    <web-resource-collection>
-      <web-resource-name>Filter pages</web-resource-name>
       <url-pattern>/filters/*</url-pattern>
-    </web-resource-collection>
-    <web-resource-collection>
-      <web-resource-name>Agent pages</web-resource-name>
       <url-pattern>/agents/*</url-pattern>
-    </web-resource-collection>
-    <web-resource-collection>
-      <web-resource-name>DataFile pages</web-resource-name>
       <url-pattern>/datafiles/*</url-pattern>
-    </web-resource-collection>
-    <web-resource-collection>
-      <web-resource-name>Tools pages</web-resource-name>
       <url-pattern>/tools/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
