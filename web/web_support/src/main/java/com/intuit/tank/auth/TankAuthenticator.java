@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -57,25 +56,21 @@ public class TankAuthenticator implements Serializable {
     private SecurityContext securityContext;
 
     @Inject
-    private FacesContext facesContext;
-
-    private ExternalContext externalContext = facesContext.getExternalContext();
-
-    @Inject
     private Messages messages;
 
     public void submit() throws IOException {
 
         switch (continueAuthentication()) {
             case SEND_CONTINUE:
-                facesContext.responseComplete();
+                FacesContext.getCurrentInstance().responseComplete();
                 break;
             case SEND_FAILURE:
                 messages.error("Invalid username or password");
                 break;
             case SUCCESS:
                 messages.info("You're signed in as " + username);
-                externalContext.redirect(externalContext.getRequestContextPath() + "/projects/index.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect(
+                        FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/projects/index.xhtml");
                 break;
             case NOT_DONE:
         }
@@ -83,8 +78,8 @@ public class TankAuthenticator implements Serializable {
 
     private AuthenticationStatus continueAuthentication() {
         return securityContext.authenticate(
-                (HttpServletRequest) externalContext.getRequest(),
-                (HttpServletResponse) externalContext.getResponse(),
+                (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
+                (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse(),
                 AuthenticationParameters.withParams().credential(new UsernamePasswordCredential(username, password))
         );
     }

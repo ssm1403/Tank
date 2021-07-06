@@ -13,22 +13,13 @@
   </resource-ref>
 
   <context-param>
-    <param-name>com.sun.faces.enableMissingResourceLibraryDetection</param-name>
-    <param-value>true</param-value>
-  </context-param>
-
-  <context-param>
     <param-name>primefaces.THEME</param-name>
     <param-value>redmond</param-value>
   </context-param>
 
   <context-param>
     <param-name>javax.faces.PROJECT_STAGE</param-name>
-    <param-value>Production</param-value>
-  </context-param>
-  <context-param>
-    <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
-    <param-value>true</param-value>
+    <param-value>Development</param-value>
   </context-param>
 
   <filter>
@@ -64,7 +55,6 @@
 
   <security-constraint>
     <web-resource-collection>
-      <web-resource-name>Common pages</web-resource-name>
       <url-pattern>/projects/*</url-pattern>
       <url-pattern>/scripts/*</url-pattern>
       <url-pattern>/filters/*</url-pattern>

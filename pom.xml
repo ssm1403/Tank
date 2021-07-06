@@ -33,7 +33,6 @@
 
     <version-tomcat>9.0.46</version-tomcat>
     <weld.version>3.1.7.SP1</weld.version>
-    <jsf.version>2.2.20</jsf.version>
     <javaee.version>8.0</javaee.version>
 
     <version.enunciate>2.13.3</version.enunciate>
@@ -256,6 +255,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.glassfish.soteria</groupId>
+      <artifactId>jakarta.security.enterprise</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
     </dependency>
@@ -436,14 +440,15 @@
 
       <!-- JSF -->
       <dependency>
-        <groupId>com.sun.faces</groupId>
-        <artifactId>jsf-api</artifactId>
-        <version>${jsf.version}</version>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.faces</artifactId>
+        <version>2.3.9</version>
       </dependency>
+
       <dependency>
-        <groupId>com.sun.faces</groupId>
-        <artifactId>jsf-impl</artifactId>
-        <version>${jsf.version}</version>
+        <groupId>org.glassfish.soteria</groupId>
+        <artifactId>jakarta.security.enterprise</artifactId>
+        <version>1.0.1</version>
       </dependency>
 
       <dependency>
