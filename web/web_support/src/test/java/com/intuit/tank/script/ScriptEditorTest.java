@@ -53,7 +53,7 @@ public class ScriptEditorTest {
     private ScriptEditor fixture;
 
     @Mock
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     @Mock
     Messages messages;

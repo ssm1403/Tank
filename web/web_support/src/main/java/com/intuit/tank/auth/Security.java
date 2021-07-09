@@ -19,7 +19,7 @@ package com.intuit.tank.auth;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.enterprise.SecurityContext;
@@ -39,13 +39,13 @@ import com.intuit.tank.vm.settings.TankConfig;
  * 
  */
 @Named
-@Dependent
+@RequestScoped
 public class Security implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     @Inject
     private TankConfig tankConfig;

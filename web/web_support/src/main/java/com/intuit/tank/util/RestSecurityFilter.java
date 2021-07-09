@@ -44,7 +44,7 @@ public class RestSecurityFilter implements Filter {
     private TankConfig config;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

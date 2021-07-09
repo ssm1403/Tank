@@ -24,7 +24,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.enterprise.AuthenticationStatus;
-import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +52,7 @@ public class TankAuthenticator implements Serializable {
     private String username;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     @Inject
     private Messages messages;

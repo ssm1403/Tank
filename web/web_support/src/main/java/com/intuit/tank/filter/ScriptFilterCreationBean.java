@@ -55,7 +55,7 @@ public class ScriptFilterCreationBean implements Serializable {
     private ExceptionHandler exceptionHandler;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
     
     @Inject
     private Security security;

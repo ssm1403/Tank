@@ -57,7 +57,7 @@ public class TankXmlUploadBean implements Serializable {
     private Event<ModifiedScriptMessage> scriptEvent;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     @Inject
     private Messages messages;

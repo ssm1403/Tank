@@ -56,7 +56,7 @@ public class ScriptBeanTest {
     private ScriptLoader scriptLoader;
 
     @Mock
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     @Mock
     private Security security;

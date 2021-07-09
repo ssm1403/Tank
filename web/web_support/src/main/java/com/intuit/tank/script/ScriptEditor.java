@@ -106,7 +106,7 @@ public class ScriptEditor implements Serializable {
     private LogicStepEditor logicStepEditor;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
     
     @Inject
     private Security security;

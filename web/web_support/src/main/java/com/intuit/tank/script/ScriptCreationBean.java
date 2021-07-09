@@ -70,7 +70,7 @@ public class ScriptCreationBean implements Serializable {
     private ScriptProcessor scriptProcessor;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
     
     @Inject
     private Security security;

@@ -52,7 +52,7 @@ public class AccountModify implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     private String passwordConfirm;
 

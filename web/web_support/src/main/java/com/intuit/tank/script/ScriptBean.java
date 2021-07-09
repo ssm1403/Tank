@@ -57,7 +57,7 @@ public class ScriptBean extends SelectableBean<Script> implements Serializable, 
     private ScriptLoader scriptLoader;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
 
     @Inject
     private Security security;

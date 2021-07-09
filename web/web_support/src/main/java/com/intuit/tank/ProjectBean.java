@@ -64,7 +64,7 @@ public class ProjectBean implements Serializable {
     private Conversation conversation;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
     
     @Inject
     private Security security;

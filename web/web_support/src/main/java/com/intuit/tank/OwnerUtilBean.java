@@ -45,7 +45,7 @@ public class OwnerUtilBean implements Serializable {
     UserAdmin userAdmin;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
     
     @Inject
     Security security;

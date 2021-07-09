@@ -54,7 +54,7 @@ public class FileUploadBean implements Serializable {
     private Event<ModifiedDatafileMessage> dataFileEvent;
 
     @Inject
-    private SecurityContext securityContext;
+    private TankSecurityContext securityContext;
     @Inject
     private Messages messages;
 
