@@ -9,10 +9,10 @@ import com.intuit.tank.project.User;
 import com.intuit.tank.vm.settings.OidcSsoConfig;
 import com.intuit.tank.vm.settings.TankConfig;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;

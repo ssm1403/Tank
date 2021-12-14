@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;

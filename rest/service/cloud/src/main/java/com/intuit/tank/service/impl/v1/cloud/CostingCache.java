@@ -16,7 +16,7 @@ package com.intuit.tank.service.impl.v1.cloud;
  * #L%
  */
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * CostingCache

@@ -26,6 +26,8 @@ import com.intuit.tank.util.Messages;
 import com.intuit.tank.view.filter.ViewFilterType;
 import com.intuit.tank.vm.settings.AccessRight;
 import com.intuit.tank.wrapper.SelectableWrapper;
+import jakarta.enterprise.context.ApplicationScoped;
+
 import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
@@ -33,8 +35,6 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ import java.util.List;
 
 
 @EnableAutoWeld
-@ActivateScopes(ViewScoped.class)
+@ActivateScopes(ApplicationScoped.class)
 public class ScriptBeanTest {
 
     @InjectMocks

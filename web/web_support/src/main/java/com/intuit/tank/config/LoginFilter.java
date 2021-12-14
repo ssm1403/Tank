@@ -3,7 +3,7 @@ package com.intuit.tank.config;
 import java.io.IOException;
 import java.util.Objects;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;

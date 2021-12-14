@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 

@@ -18,8 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.intuit.tank.util.Messages;
 

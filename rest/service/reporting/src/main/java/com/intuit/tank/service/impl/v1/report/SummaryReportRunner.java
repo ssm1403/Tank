@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import javax.enterprise.event.Event;
+import jakarta.enterprise.event.Event;
 
 import com.amazonaws.xray.AWSXRay;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;

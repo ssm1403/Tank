@@ -13,7 +13,7 @@ package com.intuit.tank.service.util;
  * #L%
  */
 
-import javax.ws.rs.core.CacheControl;
+import jakarta.ws.rs.core.CacheControl;
 
 import org.junit.jupiter.api.*;
 

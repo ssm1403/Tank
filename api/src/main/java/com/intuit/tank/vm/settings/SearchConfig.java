@@ -15,10 +15,10 @@ package com.intuit.tank.vm.settings;
 
 import java.io.File;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Nonnull;
 
 public class SearchConfig {
 

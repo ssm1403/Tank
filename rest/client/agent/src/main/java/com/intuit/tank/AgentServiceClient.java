@@ -18,11 +18,11 @@ package com.intuit.tank;
 
 import java.io.InputStream;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
 import com.intuit.tank.api.model.v1.agent.TankHttpClientDefinitionContainer;
 import com.intuit.tank.api.service.v1.agent.AgentService;

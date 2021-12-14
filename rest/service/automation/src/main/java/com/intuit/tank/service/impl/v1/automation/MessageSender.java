@@ -17,8 +17,8 @@ package com.intuit.tank.service.impl.v1.automation;
  */
 
 import javax.annotation.Nonnull;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
+import jakarta.enterprise.event.Event;
+import jakarta.inject.Inject;
 
 import com.intuit.tank.vm.settings.ModifiedEntityMessage;
 

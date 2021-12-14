@@ -16,23 +16,26 @@ package com.intuit.tank.script;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.intuit.tank.filter.FilterBean;
 import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.primefaces.model.file.CommonsUploadedFile;
 import org.primefaces.model.file.UploadedFile;
 
 import com.intuit.tank.project.ScriptFilter;
 import com.intuit.tank.project.ScriptFilterGroup;
-import com.intuit.tank.script.ScriptCreationBean;
 import com.intuit.tank.wrapper.SelectableWrapper;
 
-import javax.enterprise.context.ConversationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ConversationScoped;
 
 /**
  * The class <code>ScriptCreationBeanTest</code> contains tests for the class <code>{@link ScriptCreationBean}</code>.
@@ -42,9 +45,17 @@ import javax.inject.Inject;
 @EnableAutoWeld
 @ActivateScopes(ConversationScoped.class)
 public class ScriptCreationBeanTest {
+
+    @Mock
+    private FilterBean filterBean;
     
-    @Inject
+    @InjectMocks
     private ScriptCreationBean scriptCreationBean;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
     
     /**
      * Run the ScriptCreationBean() constructor test.

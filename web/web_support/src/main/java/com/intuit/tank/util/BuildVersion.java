@@ -21,10 +21,10 @@ import java.util.Date;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.servlet.ServletContext;
 
 import org.apache.logging.log4j.LogManager;
