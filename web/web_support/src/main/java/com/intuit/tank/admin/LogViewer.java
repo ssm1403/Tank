@@ -27,7 +27,7 @@ import java.util.Objects;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;

@@ -33,7 +33,7 @@
         </exclusion>
         <exclusion>
 	      <groupId>org.hibernate</groupId>
-	      <artifactId>hibernate-envers</artifactId>
+	      <artifactId>hibernate-envers-jakarta</artifactId>
         </exclusion>
         <exclusion>
 	      <groupId>org.picketlink</groupId>

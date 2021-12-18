@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 import com.intuit.tank.dao.ScriptGroupDao;
 import com.intuit.tank.dao.WorkloadDao;

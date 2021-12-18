@@ -16,16 +16,12 @@ package com.intuit.tank.converter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.primefaces.extensions.component.dynaform.DynaForm;
-
-import com.intuit.tank.converter.CollectionConverter;
 
 /**
  * The class <code>CollectionConverterTest</code> contains tests for the class <code>{@link CollectionConverter}</code>.
@@ -63,7 +59,7 @@ public class CollectionConverterTest {
         throws Exception {
         CollectionConverter fixture = new CollectionConverter();
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        UIComponent uiComponent = new DynaForm();
+        UIComponent uiComponent = Mockito.mock(UIComponent.class);
         Object obj = new LinkedList();
 
         String result = fixture.getAsString(facesContext, uiComponent, obj);
@@ -82,7 +78,7 @@ public class CollectionConverterTest {
         throws Exception {
         CollectionConverter fixture = new CollectionConverter();
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        UIComponent uiComponent = new DynaForm();
+        UIComponent uiComponent = Mockito.mock(UIComponent.class);
         Object obj = new LinkedList();
 
         String result = fixture.getAsString(facesContext, uiComponent, obj);
@@ -105,7 +101,7 @@ public class CollectionConverterTest {
         throws Exception {
         CollectionConverter fixture = new CollectionConverter();
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        UIComponent uiComponent = new DynaForm();
+        UIComponent uiComponent = Mockito.mock(UIComponent.class);
         Object obj = new LinkedList();
 
         String result = fixture.getAsString(facesContext, uiComponent, obj);

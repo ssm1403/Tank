@@ -20,7 +20,7 @@ import java.util.Map;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ConversationScoped;
-import javax.faces.context.FacesContext;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 

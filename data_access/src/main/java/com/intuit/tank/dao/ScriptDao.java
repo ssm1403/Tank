@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Nonnull;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

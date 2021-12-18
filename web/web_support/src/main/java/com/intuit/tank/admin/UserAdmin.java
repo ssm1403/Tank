@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import jakarta.enterprise.event.Event;
-import javax.faces.view.ViewScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 

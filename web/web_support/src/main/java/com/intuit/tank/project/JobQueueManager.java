@@ -15,7 +15,7 @@ package com.intuit.tank.project;
 
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.event.Reception;
-import javax.faces.view.ViewScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
 import com.intuit.tank.qualifier.Modified;

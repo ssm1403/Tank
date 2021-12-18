@@ -23,7 +23,7 @@
 
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-envers</artifactId>
+      <artifactId>hibernate-envers-jakarta</artifactId>
     </dependency>
 
     <dependency>
@@ -33,8 +33,8 @@
 
     <!-- Bean Validation API (JSR 303) -->
     <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
     </dependency>
 
     <dependency>

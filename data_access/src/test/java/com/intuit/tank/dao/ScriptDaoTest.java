@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 
 import com.intuit.tank.test.TestGroups;
 import org.apache.logging.log4j.Level;

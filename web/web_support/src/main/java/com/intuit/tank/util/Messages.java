@@ -16,8 +16,8 @@ package com.intuit.tank.util;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
 /**

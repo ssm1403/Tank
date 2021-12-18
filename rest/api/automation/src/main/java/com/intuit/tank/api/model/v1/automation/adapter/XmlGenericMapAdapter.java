@@ -35,7 +35,7 @@ package com.intuit.tank.api.model.v1.automation.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * 

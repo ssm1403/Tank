@@ -30,15 +30,15 @@
 				</exclusion>
 				<exclusion>
 					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate-envers</artifactId>
+					<artifactId>hibernate-envers-jakarta</artifactId>
 				</exclusion>
 				<exclusion>
 					<artifactId>serializer</artifactId>
 					<groupId>xalan</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>validation-api</artifactId>
-					<groupId>javax.validation</groupId>
+					<groupId>jakarta.validation</groupId>
+					<artifactId>jakarta.validation-api</artifactId>
 				</exclusion>
 				<exclusion>
 					<artifactId>javassist</artifactId>

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.enterprise.context.SessionScoped;
-import javax.faces.model.SelectItem;
+import jakarta.faces.model.SelectItem;
 import jakarta.inject.Named;
 
 import com.intuit.tank.harness.StopBehavior;

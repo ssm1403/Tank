@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
-import javax.faces.context.FacesContext;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
 /**

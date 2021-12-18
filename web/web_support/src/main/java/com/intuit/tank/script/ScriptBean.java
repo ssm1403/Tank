@@ -18,8 +18,8 @@ import java.util.List;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.event.Event;
-import javax.faces.model.SelectItem;
-import javax.faces.view.ViewScoped;
+import jakarta.faces.model.SelectItem;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 

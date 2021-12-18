@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import jakarta.enterprise.context.Conversation;
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.enterprise.event.Event;
-import javax.faces.model.SelectItem;
+import jakarta.faces.model.SelectItem;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 

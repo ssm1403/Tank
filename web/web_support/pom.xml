@@ -110,23 +110,25 @@
 
     <!-- JSF -->
     <dependency>
+      <groupId>jakarta.faces</groupId>
+      <artifactId>jakarta.faces-api</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.glassfish</groupId>
-      <artifactId>javax.faces</artifactId>
+      <artifactId>jakarta.faces</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.primefaces</groupId>
       <artifactId>primefaces</artifactId>
+      <classifier>jakarta</classifier>
     </dependency>
     
     <dependency>
       <groupId>org.primefaces.extensions</groupId>
       <artifactId>primefaces-extensions</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.primefaces.extensions</groupId>
-      <artifactId>resources-ckeditor</artifactId>
+      <classifier>jakarta</classifier>
     </dependency>
 
     <dependency>
@@ -136,8 +138,8 @@
 
     <!-- Bean Validation API (JSR 303) -->
     <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
     </dependency>
 
     <dependency>
@@ -147,8 +149,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
       <scope>runtime</scope>
     </dependency>
 

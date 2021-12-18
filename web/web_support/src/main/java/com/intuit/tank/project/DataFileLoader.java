@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Observes;
-import javax.faces.model.SelectItem;
+import jakarta.faces.model.SelectItem;
 import jakarta.inject.Named;
 
 import com.intuit.tank.ModifiedDatafileMessage;

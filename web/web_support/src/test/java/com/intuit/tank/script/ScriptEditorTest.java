@@ -40,7 +40,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import jakarta.enterprise.context.Conversation;
-import javax.security.enterprise.CallerPrincipal;
+import jakarta.security.enterprise.CallerPrincipal;
 
 /**
  * The class <code>ScriptEditorTest</code> contains tests for the class <code>{@link ScriptEditor}</code>.
