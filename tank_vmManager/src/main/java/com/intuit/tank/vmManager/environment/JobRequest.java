@@ -80,9 +80,9 @@ public class JobRequest implements Runnable {
             try {
                 vmTracker.setStatus(createCloudStatus(instanceRequest, info));
                 dao.addImageFromInfo(request.getJobId(), info, request.getRegion());
-                logger.info("Added image (" + info.getInstanceId() + ") to VMImage table");
+                logger.info("Added instance (" + info.getInstanceId() + ") to VMImage table");
             } catch (Exception e) {
-                logger.warn("Error persisting VM Image: " + e, e);
+                logger.warn("Error persisting VM instance: " + e, e);
             }
         }
         Thread thread = new Thread(watchDog);
