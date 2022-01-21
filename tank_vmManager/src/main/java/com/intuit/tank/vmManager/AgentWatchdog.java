@@ -129,7 +129,7 @@ public class AgentWatchdog implements Runnable {
         LOG.info("Starting WatchDog: " + this.toString());
         AWSXRay.getGlobalRecorder().beginNoOpSegment(); //jdbcInterceptor will throw SegmentNotFoundException,RuntimeException without this
         try {
-            List<VMInformation> instances = new ArrayList<VMInformation>(vmInfo);
+            List<VMInformation> instances = new ArrayList<>(vmInfo);
             while (relaunchCount <= maxRelaunch && !stopped && vmTracker.isRunning(instanceRequest.getJobId())) {
                 if (checkForStart) {
                     LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " instances to reached running state...");
@@ -147,15 +147,15 @@ public class AgentWatchdog implements Runnable {
                         LOG.info("All instances reached running.");
                         vmTracker.publishEvent(new JobEvent(instanceRequest.getJobId(), "All instances are running",
                                 JobLifecycleEvent.AGENT_STARTED));
+                        instances = new ArrayList<>(vmInfo); // Reset instances count
                         checkForStart = false;
                         startTime = System.currentTimeMillis();
                     }
                 }
-                // all instances are now started
-                instances = new ArrayList<VMInformation>(vmInfo);
                 String jobId = instanceRequest.getJobId();
                 // check to see if all agents have reported back
-                LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " tank_agent reporting...");
+                long waited =  System.currentTimeMillis() - startTime;
+                LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " tank_agent reporting...  for " + waited + " seconds");
                 removeReportingInstances(jobId, instances);
                 if (!instances.isEmpty()) {
                     if (shouldRelaunchInstances(maxWaitForReporting)) {
@@ -166,7 +166,6 @@ public class AgentWatchdog implements Runnable {
                                 + getInstanceIdList(instances));
                     }
                     Thread.sleep(sleepTime);
-                    continue;
                 } else {
                     LOG.info("All tank_agents reported back to controller. Ready to start!");
                     vmTracker.publishEvent(new JobEvent(instanceRequest.getJobId(),
@@ -200,11 +199,9 @@ public class AgentWatchdog implements Runnable {
             for (CloudVmStatus status : vmStatusForJob.getStatuses()) {
                 if (status.getVmStatus() == VMStatus.pending || status.getVmStatus() == VMStatus.running
                         || (status.getJobStatus() != JobStatus.Unknown && status.getJobStatus() != JobStatus.Starting)) {
-                    VMInformation vmInfo = instances.stream()
-                            .filter(vminfo -> Objects.equals(vminfo.getInstanceId(), status.getInstanceId()))
-                            .findFirst()
-                            .get();
-                    instances.remove(vmInfo);
+                    instances = instances.stream()
+                            .filter(instance -> !Objects.equals(instance.getInstanceId(), status.getInstanceId()))
+                            .collect(Collectors.toList());
                 }
             }
         } else {
@@ -315,11 +312,9 @@ public class AgentWatchdog implements Runnable {
         List<VMInformation> foundInstances = amazonInstance.describeInstances(instances.stream().map(VMInformation::getInstanceId).toArray(String[]::new));
         for (VMInformation info : foundInstances) {
             if ("RUNNING".equalsIgnoreCase(info.getState())) {
-                VMInformation vmInfo = instances.stream()
-                        .filter(vminfo -> Objects.equals(vminfo.getInstanceId(), info.getInstanceId()))
-                        .findFirst()
-                        .get();
-                instances.remove(vmInfo);
+                instances = instances.stream()
+                        .filter(instance -> !Objects.equals(instance.getInstanceId(), info.getInstanceId()))
+                        .collect(Collectors.toList());
             }
         }
 
