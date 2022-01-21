@@ -13,6 +13,7 @@ import com.intuit.tank.vm.api.enumerated.VMRegion;
 import com.intuit.tank.vm.vmManager.VMInformation;
 import com.intuit.tank.vm.vmManager.VMInstanceRequest;
 import com.intuit.tank.vmManager.environment.amazon.AmazonInstance;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -38,6 +39,7 @@ public class AgentWatchdogTest {
     private AmazonInstance amazonInstanceMock = new AmazonInstance(VMRegion.STANDALONE);
 
     @Test
+    @Disabled
     public void toStringTest() {
         VMTracker vmTracker = new VMTrackerImpl();
         VMInstanceRequest instanceRequest = new VMInstanceRequest();
