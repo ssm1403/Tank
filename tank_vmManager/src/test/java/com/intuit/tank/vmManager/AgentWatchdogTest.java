@@ -63,7 +63,7 @@ public class AgentWatchdogTest {
         when(vmTrackerMock.getVmStatusForJob("123")).thenReturn(cloudVmStatusContainerMock);
 
         VMInformation vmInformation = new VMInformation();
-        vmInformation.setState("running");
+        vmInformation.setState("RUNNING");
         vmInformation.setInstanceId("i-123456789");
         List<VMInformation> vmInfo = Collections.singletonList( vmInformation );
         when(amazonInstanceMock.describeInstances(Mockito.anyString())).thenReturn(vmInfo);
@@ -93,7 +93,7 @@ public class AgentWatchdogTest {
         when(vmTrackerMock.getVmStatusForJob("123")).thenReturn(cloudVmStatusContainerMock);
 
         VMInformation vmInformation = new VMInformation();
-        vmInformation.setState("running");
+        vmInformation.setState("RUNNING");
         vmInformation.setInstanceId("i-123456789");
         List<VMInformation> vmInfo = Collections.singletonList( vmInformation );
         when(amazonInstanceMock.describeInstances(Mockito.anyString())).thenReturn(vmInfo);
@@ -118,12 +118,12 @@ public class AgentWatchdogTest {
         CloudVmStatus vmstatusPending = new CloudVmStatus("i-123456789", "123", "sg-123456", JobStatus.Starting, VMImageType.AGENT, VMRegion.STANDALONE, VMStatus.pending, new ValidationStatus(), 1, 1, new Date(), new Date());
         Set<CloudVmStatus> setStarting = Stream.of(vmstatusStarting).collect(Collectors.toCollection(HashSet::new));
         Set<CloudVmStatus> setPending = Stream.of(vmstatusPending).collect(Collectors.toCollection(HashSet::new));
-        when(cloudVmStatusContainerMock.getStatuses()).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setPending);
+        when(cloudVmStatusContainerMock.getStatuses()).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setStarting).thenReturn(setPending);
         when(vmTrackerMock.isRunning("123")).thenReturn(true);
         when(vmTrackerMock.getVmStatusForJob("123")).thenReturn(cloudVmStatusContainerMock);
 
         VMInformation vmInformation = new VMInformation();
-        vmInformation.setState("running");
+        vmInformation.setState("RUNNING");
         vmInformation.setInstanceId("i-123456789");
         List<VMInformation> vmInfo = Collections.singletonList( vmInformation );
         when(amazonInstanceMock.describeInstances(Mockito.anyString())).thenReturn(vmInfo);
@@ -142,7 +142,7 @@ public class AgentWatchdogTest {
         verify(amazonInstanceMock, times(2)).describeInstances("i-123456789");
         verify(amazonInstanceMock, times(1)).killInstances(Mockito.anyList());
         verify(amazonInstanceMock, times(1)).create(Mockito.any());
-        verify(cloudVmStatusContainerMock, times(9)).getEndTime();
-        verify(cloudVmStatusContainerMock, times(7)).getStatuses();
+        verify(cloudVmStatusContainerMock, times(8)).getEndTime();
+        verify(cloudVmStatusContainerMock, times(6)).getStatuses();
     }
 }
