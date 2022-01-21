@@ -132,7 +132,7 @@ public class AgentWatchdog implements Runnable {
             List<VMInformation> instances = new ArrayList<VMInformation>(vmInfo);
             while (relaunchCount <= maxRelaunch && !stopped && vmTracker.isRunning(instanceRequest.getJobId())) {
                 if (checkForStart) {
-                    LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " instances have reached running state...");
+                    LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " instances to reached running state...");
                     removeRunningInstances(instances);
                     if (!instances.isEmpty()) {
                         if (shouldRelaunchInstances(maxWaitForStart)) {
@@ -314,8 +314,12 @@ public class AgentWatchdog implements Runnable {
         }
         List<VMInformation> foundInstances = amazonInstance.describeInstances(instances.stream().map(VMInformation::getInstanceId).toArray(String[]::new));
         for (VMInformation info : foundInstances) {
-            if ("running".equalsIgnoreCase(info.getState())) {
-                instances.remove(info);
+            if ("RUNNING".equalsIgnoreCase(info.getState())) {
+                VMInformation vmInfo = instances.stream()
+                        .filter(vminfo -> Objects.equals(vminfo.getInstanceId(), info.getInstanceId()))
+                        .findFirst()
+                        .get();
+                instances.remove(vmInfo);
             }
         }
 
