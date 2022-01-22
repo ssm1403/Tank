@@ -133,7 +133,7 @@ public class AgentWatchdog implements Runnable {
             while (relaunchCount <= maxRelaunch && !stopped && vmTracker.isRunning(instanceRequest.getJobId())) {
                 if (checkForStart) {
                     LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " instances to reached running state...");
-                    removeRunningInstances(instances);
+                    instances = removeRunningInstances(instances);
                     if (!instances.isEmpty()) {
                         if (shouldRelaunchInstances(maxWaitForStart)) {
                             relaunch(instances);
@@ -194,7 +194,6 @@ public class AgentWatchdog implements Runnable {
      * @param instances
      */
     private void removeReportingInstances(String jobId, List<VMInformation> instances) {
-        List<VMInformation> remove = null;
         CloudVmStatusContainer vmStatusForJob = vmTracker.getVmStatusForJob(jobId);
         if (vmStatusForJob != null && vmStatusForJob.getEndTime() == null) {
             for (CloudVmStatus status : vmStatusForJob.getStatuses()) {
@@ -306,23 +305,15 @@ public class AgentWatchdog implements Runnable {
     /**
      * @param instances list of instance to check if reached running state
      */
-    private void removeRunningInstances(List<VMInformation> instances) {
+    private List<VMInformation> removeRunningInstances(List<VMInformation> instances) {
         CloudVmStatusContainer vmStatusForJob = vmTracker.getVmStatusForJob(instanceRequest.getJobId());
         if (vmStatusForJob == null || vmStatusForJob.getEndTime() != null) {
             stopped = true;
             throw new RuntimeException("Job appears to have been stopped. Exiting...");
         }
         List<VMInformation> foundInstances = amazonInstance.describeInstances(instances.stream().map(VMInformation::getInstanceId).toArray(String[]::new));
-        List<VMInformation> remove = null;
-        for (VMInformation vminfo : foundInstances) {
-            if ("RUNNING".equalsIgnoreCase(vminfo.getState())) {
-                VMInformation vmInfo = instances.stream()
-                        .filter(instance -> Objects.equals(vminfo.getInstanceId(), instance.getInstanceId()))
-                        .findFirst()
-                        .get();
-                instances.remove(vmInfo);
-
-            }
-        }
+        return foundInstances.stream()
+                .filter(vminfo -> !("RUNNING".equalsIgnoreCase(vminfo.getState()) || "TERMINATED".equalsIgnoreCase(vminfo.getState())))
+                .collect(Collectors.toList());
     }
 }
