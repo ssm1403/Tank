@@ -196,14 +196,12 @@ public class AgentWatchdog implements Runnable {
     private List<VMInformation> removeReportingInstances(String jobId, List<VMInformation> instances) {
         CloudVmStatusContainer vmStatusForJob = vmTracker.getVmStatusForJob(jobId);
         if (vmStatusForJob != null && vmStatusForJob.getEndTime() == null) {
-            List<VMInformation> remove = vmStatusForJob.getStatuses().stream()
-                    .filter(status -> (status.getVmStatus() == VMStatus.pending || status.getVmStatus() == VMStatus.running
+            return vmStatusForJob.getStatuses().stream()
+                    .filter(status -> !(status.getVmStatus() == VMStatus.pending || status.getVmStatus() == VMStatus.running
                             || (status.getJobStatus() != JobStatus.Unknown && status.getJobStatus() != JobStatus.Starting)))
                     .map(CloudVmStatus::getInstanceId)
                     .flatMap(instanceId -> instances.stream().filter(instance -> instance.getInstanceId().equals(instanceId)))
                     .collect(Collectors.toList());
-            instances.removeAll(remove);
-            return instances;
         } else {
             stopped = true;
             throw new RuntimeException("Job appears to have been stopped. Exiting...");
@@ -278,8 +276,8 @@ public class AgentWatchdog implements Runnable {
     private CloudVmStatus createCloudStatus(VMInstanceRequest req, VMInformation info) {
         return new CloudVmStatus(info.getInstanceId(), req.getJobId(),
                 req.getInstanceDescription() != null ? req.getInstanceDescription().getSecurityGroup() : "unknown",
-                JobStatus.Starting,
-                VMImageType.AGENT, req.getRegion(), VMStatus.pending, new ValidationStatus(), 0, 0, null, null);
+                JobStatus.Starting, VMImageType.AGENT, req.getRegion(), VMStatus.starting, new ValidationStatus(),
+                0, 0, null, null);
     }
 
     /**
@@ -289,7 +287,7 @@ public class AgentWatchdog implements Runnable {
     private CloudVmStatus createTerminatedVmStatus(VMInformation info) {
         LOG.info("Terminating " + info);
         return new CloudVmStatus(info.getInstanceId(), instanceRequest.getJobId(), "unknown",
-                JobStatus.Stopped, VMImageType.AGENT, instanceRequest.getRegion(),
+                JobStatus.Starting, VMImageType.AGENT, instanceRequest.getRegion(),
                 VMStatus.terminated, new ValidationStatus(), 0, 0, null, null);
     }
 
