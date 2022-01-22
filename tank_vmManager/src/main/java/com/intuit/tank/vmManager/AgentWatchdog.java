@@ -156,7 +156,7 @@ public class AgentWatchdog implements Runnable {
                 // check to see if all agents have reported back
                 long waited =  System.currentTimeMillis() - startTime;
                 LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " tank_agent reporting...  for " + waited + " seconds");
-                removeReportingInstances(jobId, instances);
+                instances = removeReportingInstances(jobId, instances);
                 if (!instances.isEmpty()) {
                     if (shouldRelaunchInstances(maxWaitForReporting)) {
                         relaunch(instances);
@@ -193,19 +193,15 @@ public class AgentWatchdog implements Runnable {
     /**
      * @param instances
      */
-    private void removeReportingInstances(String jobId, List<VMInformation> instances) {
+    private List<VMInformation> removeReportingInstances(String jobId, List<VMInformation> instances) {
         CloudVmStatusContainer vmStatusForJob = vmTracker.getVmStatusForJob(jobId);
         if (vmStatusForJob != null && vmStatusForJob.getEndTime() == null) {
-            for (CloudVmStatus status : vmStatusForJob.getStatuses()) {
-                if (status.getVmStatus() == VMStatus.pending || status.getVmStatus() == VMStatus.running
-                        || (status.getJobStatus() != JobStatus.Unknown && status.getJobStatus() != JobStatus.Starting)) {
-                    VMInformation vmInfo = instances.stream()
-                            .filter(vminfo -> Objects.equals(vminfo.getInstanceId(), status.getInstanceId()))
-                            .findFirst()
-                            .get();
-                    instances.remove(vmInfo);
-                }
-            }
+            return vmStatusForJob.getStatuses().stream()
+                    .filter(status -> !(status.getVmStatus() == VMStatus.pending || status.getVmStatus() == VMStatus.running
+                            || (status.getJobStatus() != JobStatus.Unknown && status.getJobStatus() != JobStatus.Starting)))
+                    .map(CloudVmStatus::getInstanceId)
+                    .flatMap(instanceId -> instances.stream().filter(instance -> instance.getInstanceId().equals(instanceId)))
+                    .collect(Collectors.toList());
         } else {
             stopped = true;
             throw new RuntimeException("Job appears to have been stopped. Exiting...");
