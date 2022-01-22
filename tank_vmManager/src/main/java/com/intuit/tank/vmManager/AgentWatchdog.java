@@ -196,12 +196,14 @@ public class AgentWatchdog implements Runnable {
     private List<VMInformation> removeReportingInstances(String jobId, List<VMInformation> instances) {
         CloudVmStatusContainer vmStatusForJob = vmTracker.getVmStatusForJob(jobId);
         if (vmStatusForJob != null && vmStatusForJob.getEndTime() == null) {
-            return vmStatusForJob.getStatuses().stream()
-                    .filter(status -> !(status.getVmStatus() == VMStatus.pending || status.getVmStatus() == VMStatus.running
+            List<VMInformation> remove = vmStatusForJob.getStatuses().stream()
+                    .filter(status -> (status.getVmStatus() == VMStatus.pending || status.getVmStatus() == VMStatus.running
                             || (status.getJobStatus() != JobStatus.Unknown && status.getJobStatus() != JobStatus.Starting)))
                     .map(CloudVmStatus::getInstanceId)
                     .flatMap(instanceId -> instances.stream().filter(instance -> instance.getInstanceId().equals(instanceId)))
                     .collect(Collectors.toList());
+            instances.removeAll(remove);
+            return instances;
         } else {
             stopped = true;
             throw new RuntimeException("Job appears to have been stopped. Exiting...");
@@ -209,7 +211,7 @@ public class AgentWatchdog implements Runnable {
     }
 
     /**
-     * @param instances
+     * @param instances is a list of instance to relanch
      *
      */
     private void relaunch(List<VMInformation> instances) {
