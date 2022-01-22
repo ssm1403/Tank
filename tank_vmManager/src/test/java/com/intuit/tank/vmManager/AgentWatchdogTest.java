@@ -13,14 +13,12 @@ import com.intuit.tank.vm.api.enumerated.VMRegion;
 import com.intuit.tank.vm.vmManager.VMInformation;
 import com.intuit.tank.vm.vmManager.VMInstanceRequest;
 import com.intuit.tank.vmManager.environment.amazon.AmazonInstance;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -29,7 +27,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,21 +34,6 @@ public class AgentWatchdogTest {
 
     @Mock
     private AmazonInstance amazonInstanceMock = new AmazonInstance(VMRegion.STANDALONE);
-
-    @Test
-    @Disabled
-    public void toStringTest() {
-        VMTracker vmTracker = new VMTrackerImpl();
-        VMInstanceRequest instanceRequest = new VMInstanceRequest();
-        instanceRequest.setRegion(VMRegion.STANDALONE);
-        List<VMInformation> vmInfo = new ArrayList<>();
-        AgentWatchdog agentWatchdog = new AgentWatchdog(instanceRequest, vmInfo, vmTracker);
-
-        String result = agentWatchdog.toString();
-
-        assertNotNull(result);
-        assertTrue(result.endsWith("[sleepTime=30000,maxWaitForStart=120000,maxWaitForReporting=360000,maxRelaunch=2]"));
-    }
 
     @Test
     public void alreadyRunningRunTest(@Mock VMTracker vmTrackerMock, @Mock CloudVmStatusContainer cloudVmStatusContainerMock) {

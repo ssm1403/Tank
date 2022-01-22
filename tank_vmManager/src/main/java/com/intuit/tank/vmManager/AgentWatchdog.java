@@ -154,7 +154,7 @@ public class AgentWatchdog implements Runnable {
                 }
                 String jobId = instanceRequest.getJobId();
                 // check to see if all agents have reported back
-                long waited =  System.currentTimeMillis() - startTime;
+                long waited =  (System.currentTimeMillis() - startTime) / 1000;
                 LOG.info("Checking for " + instances.size() + " out of " + instanceCount + " tank_agent reporting...  for " + waited + " seconds");
                 instances = removeReportingInstances(jobId, instances);
                 if (!instances.isEmpty()) {
