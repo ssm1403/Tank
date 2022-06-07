@@ -23,7 +23,7 @@
 
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-envers-jakarta</artifactId>
+      <artifactId>hibernate-envers</artifactId>
     </dependency>
 
     <dependency>

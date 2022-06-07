@@ -174,7 +174,7 @@ public class ScriptDao extends BaseDao<Script> {
             begin();
             SerializedScriptStep serializedScriptStep = serialize(script);
             serializedScriptStep.setSerialzedData(
-                    Hibernate.getLobCreator(getHibernateSession()).createBlob(serializedScriptStep.getBytes()));
+                    getHibernateSession().getLobHelper().createBlob(serializedScriptStep.getBytes()));
             SerializedScriptStep savedSerializedStep = new SerializedScriptStepDao().saveOrUpdate(serializedScriptStep);
             script.setSerializedScriptStepId(serializedScriptStep.getId());
             if (script.getId() == 0) {
