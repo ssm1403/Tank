@@ -12,6 +12,17 @@
                   and running in minutes`]
 
     [:octicons-arrow-right-24: Getting started](#)
+    
+    Response body [`HTTP/1.1 200 OK
+                   Content-Type: application/xml
+  <headers xmlns="urn:wats/domain/agent/v1">
+  <headers>
+    <header>
+      <key>...</key>
+      <value>...</value>
+    </header>
+  </headers>
+</headers>`]
 
 -   :fontawesome-brands-markdown:{ .lg .middle } __It's just Markdown__
 
