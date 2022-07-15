@@ -1,0 +1,628 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "To-dos",
+    "version": "1.0",
+    "description": "This OpenAPI v2 (Swagger) file represents a real API that lives at http://todos.stoplight.io.\n\nIt exposes functionality to manage to-do lists.",
+    "contact": {
+      "name": "Stoplight",
+      "url": "https://stoplight.io"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "todos.stoplight.io",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "apikey": {
+      "name": "apikey",
+      "type": "apiKey",
+      "in": "query",
+      "description": "Use `?apikey=123` to authenticate requests. It's super secure."
+    }
+  },
+  "tags": [
+    {
+      "name": "Todos"
+    }
+  ],
+  "paths": {
+    "/v1/agent-service/headers": {
+      "parameters": [],
+      "get": {
+        "operationId": "AgentService",
+        "summary": "Headers",
+        "tags": [
+          "Todos"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type:": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type:": "xml"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "../common/openapi.v1.yaml#/responses/404"
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type": "json"
+                }
+              }
+            }
+          },
+          "407": {
+            "description": "Proxy Authentication Required",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type": "json"
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Request Timeout",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type:": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type:": "json"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Gone",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type:": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type:": "xml"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "../common/openapi.v1.yaml#/responses/500"
+          },
+          "": {
+            "description": ""
+          }
+        },
+        "description": "string of the settings file.",
+        "parameters": []
+      },
+      "put": {
+        "operationId": "",
+        "summary": "Update Todo",
+        "tags": [
+          "Todos"
+        ],
+        "parameters": []
+      },
+      "delete": {
+        "operationId": "DELETE_todo",
+        "summary": "Delete Todo",
+        "tags": [
+          "Todos"
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "$ref": "../common/openapi.v1.yaml#/responses/401"
+          },
+          "404": {
+            "$ref": "../common/openapi.v1.yaml#/responses/404"
+          },
+          "500": {
+            "$ref": "../common/openapi.v1.yaml#/responses/500"
+          }
+        }
+      }
+    },
+    "/v1/agent-service/ping": {
+      "post": {
+        "operationId": "POST_todos",
+        "summary": "Create Todo",
+        "tags": [
+          "Todos"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "./models/todo-partial.v1.json"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "./models/todo-full.v1.json"
+            },
+            "examples": {
+              "application/json": {
+                "id": 9000,
+                "name": "It's Over 9000!!!",
+                "completed": null,
+                "completed_at": null,
+                "created_at": "2014-08-28T14:14:28.494Z",
+                "updated_at": "2014-08-28T14:14:28.494Z"
+              }
+            }
+          },
+          "401": {
+            "$ref": "../common/openapi.v1.yaml#/responses/401"
+          },
+          "500": {
+            "$ref": "../common/openapi.v1.yaml#/responses/500"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "description": "This creates a Todo object.\n\nTesting `inline code`."
+      },
+      "get": {
+        "operationId": "AgentService",
+        "summary": "ping",
+        "tags": [
+          "Todos"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type:": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type:": "json"
+                }
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "id": 1,
+                  "name": "design the thingz",
+                  "completed": true
+                },
+                {
+                  "id": 2,
+                  "name": "mock the thingz",
+                  "completed": true
+                },
+                {
+                  "id": 3,
+                  "name": "code the thingz",
+                  "completed": false
+                }
+              ]
+            }
+          },
+          "500": {
+            "$ref": "../common/openapi.v1.yaml#/responses/500"
+          }
+        },
+        "description": "Test method to test if the service is up."
+      },
+      "parameters": []
+    },
+    "/v1/agent-service/settings": {
+      "get": {
+        "summary": "settings",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type:": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type:": "xml"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "AgentService",
+        "description": "gets the settings file"
+      }
+    },
+    "/v1/agent-service/supportFiles": {
+      "get": {
+        "summary": "supportFiles",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HTTP/1.1": {
+                  "type": "integer"
+                },
+                "Content-Type:": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1": 200,
+                  "Content-Type:": "octet-stream"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "AgentService",
+        "description": "gets the support files (jar files)"
+      }
+    },
+    "/v1/agent-service/agent/availability": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {},
+        "operationId": ""
+      },
+      "post": {
+        "summary": "availability",
+        "operationId": "AgentService",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "x-examples": {
+                "example-1": {
+                  "HTTP/1.1201 Created": {}
+                }
+              },
+              "properties": {
+                "HTTP/1.1 201 Created": {
+                  "allOf": [
+                    {}
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "description": "Endpoint for standalone agent to indicate its availability.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "instance-id": {
+                  "type": "string"
+                },
+                "instance-url": {
+                  "type": "string"
+                },
+                "capacity": {
+                  "type": "integer"
+                },
+                "timestamp": {
+                  "type": "integer"
+                },
+                "availability-status": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "instance-id": "...",
+                  "instance-url": "...",
+                  "capacity": 12345,
+                  "timestamp": 12345,
+                  "availability-status": "DELEGATING"
+                }
+              }
+            },
+            "description": "The current availability of the agent."
+          }
+        ]
+      }
+    },
+    "/v1/agent-service/agent/clients": {
+      "get": {
+        "summary": "clients",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tankHttpClientDefinition": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "className": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "defaultDefinition": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "tankHttpClientDefinition": [
+                    {
+                      "name": "...",
+                      "className": "..."
+                    },
+                    {
+                      "name": "...",
+                      "className": "..."
+                    }
+                  ],
+                  "defaultDefinition": "..."
+                }
+              }
+            }
+          }
+        },
+        "operationId": "AgentService",
+        "description": "string of the settings file."
+      }
+    },
+    "/v1/agent-service/agent/ready": {
+      "get": {
+        "summary": "ready",
+        "tags": [],
+        "responses": {},
+        "operationId": "get-v1-agent-service-agent-ready"
+      },
+      "post": {
+        "summary": "",
+        "operationId": "AgentService",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "concurrentUsers": {
+                  "type": "integer"
+                },
+                "rampTime": {
+                  "type": "integer"
+                },
+                "jobId": {
+                  "type": "string"
+                },
+                "simulationTime": {
+                  "type": "integer"
+                },
+                "startUsers": {
+                  "type": "integer"
+                },
+                "userIntervalIncrement": {
+                  "type": "integer"
+                },
+                "agentInstanceNum": {
+                  "type": "integer"
+                },
+                "totalAgents": {
+                  "type": "integer"
+                },
+                "scriptUrl": {
+                  "type": "string"
+                },
+                "dataFile": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "fileName": {
+                        "type": "string"
+                      },
+                      "isDefault": {
+                        "type": "boolean"
+                      },
+                      "fileUrl": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "concurrentUsers": 12345,
+                  "rampTime": 12345,
+                  "jobId": "...",
+                  "simulationTime": 12345,
+                  "startUsers": 12345,
+                  "userIntervalIncrement": 12345,
+                  "agentInstanceNum": 12345,
+                  "totalAgents": 12345,
+                  "scriptUrl": "...",
+                  "dataFile": [
+                    {
+                      "fileName": "...",
+                      "isDefault": true,
+                      "fileUrl": "..."
+                    },
+                    {
+                      "fileName": "...",
+                      "isDefault": true,
+                      "fileUrl": "..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "description": "The agent data, a AgentTestStartData.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "job-id": {
+                  "type": "string"
+                },
+                "instance-id": {
+                  "type": "string"
+                },
+                "instance-url": {
+                  "type": "string"
+                },
+                "region": {
+                  "type": "string"
+                },
+                "capacity": {
+                  "type": "integer"
+                },
+                "users": {
+                  "type": "integer"
+                },
+                "zone": {
+                  "type": "string"
+                }
+              },
+              "x-examples": {
+                "example-1": {
+                  "job-id": "...",
+                  "instance-id": "...",
+                  "instance-url": "...",
+                  "region": "US_EAST_2",
+                  "capacity": 12345,
+                  "users": 12345,
+                  "zone": "..."
+                }
+              }
+            },
+            "description": "The agent data"
+          },
+          {
+            "type": "string",
+            "in": "header"
+          }
+        ]
+      }
+    }
+  }
+}
